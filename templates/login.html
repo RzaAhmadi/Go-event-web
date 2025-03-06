@@ -1,0 +1,48 @@
+<!DOCTYPE html>  
+<html dir="rtl" lang="fa">  
+<head>  
+    <meta charset="utf-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1">  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">  
+    <link rel="stylesheet" href="templates/css/style.css">  
+    <style>  
+        body {  
+            text-align: right; /* راست‌چین کردن متن */  
+        }  
+    </style>  
+</head>  
+
+
+<body class="vh-100">  
+    <div class="container h-100">  
+    
+        <div class="row justify-content-center align-items-center h-100">  
+            <div class="col-md-4">  
+                <div class="text-center mb-4">  
+                    <h4>وارد حساب کاربری خود شوید</h4>  
+                </div>  
+                <form method="POST" action="/login">  
+                    <div class="form-group">  
+                        <label for="username"> نام کاربری:</label>  
+                        <input type="text" class="form-control" id="username" name="username" required>  
+                    </div>  
+                    <div class="form-group">  
+                        <label for="password">کلمه عبور:</label>  
+                        <input type="password" class="form-control" id="password" name="password" required>  
+                    </div>  
+                    <div class="form-check mb-3">  
+                        <input type="checkbox" class="form-check-input" id="rememberMe">  
+                        <label class="form-check-label" for="rememberMe">به خاطر بسپار</label>  
+                    </div>  
+                    <button type="submit" class="btn btn-primary btn-block">ورود به سیستم</button>  
+                </form>  
+               
+                {{ if .error }}  
+                    <div class="alert alert-danger mt-3">{{ .error }}</div>  
+                {{ end }}  
+            </div>  
+        </div>  
+    </div>  
+ 
+</body>  
+</html>  

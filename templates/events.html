@@ -1,0 +1,178 @@
+<!DOCTYPE html>  
+<html lang="fa">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">  
+    <title>صفحه رویدادها</title>  
+    <style>  
+        body {  
+            direction: rtl;  /* راست چین کردن متن کل بدنه */  
+        }  
+        .edit-form {  
+            display: none;  
+        }  
+ table {  
+            text-align: right; /* راست چین کردن محتویات جدول */  
+        }  
+      
+    </style>  
+</head>  
+<body>  
+    <div class="container mt-4" style="text-align: center;">  
+        <h2>لیست رویدادها</h2>  
+         <!-- نوار جستجو -->  
+        <div class="mb-3">  
+            <input type="text" class="form-control" placeholder="جستجو..." id="searchInput" onkeyup="searchEvents()">  
+        </div>  
+        <table class="table table-bordered table-striped">  
+            <thead class="thead-light">  
+                <tr>  
+                    <th>شرح رویداد</th>  
+                    <th>شماره RCA</th>  
+                    <th>گروه</th>  
+                    <th>جزئیات رویداد</th>
+                    <th> عنوان رخداد</th>
+                    <th>تاریخ ثبت</th>
+                    <th>ساعت شروع</th>
+                    <th>ساعت پایان</th>
+                    <th>عملیات</th>  
+                </tr>  
+            </thead>  
+            <tbody id="eventTable">  
+                {{ range .events }}  
+                <tr id="row-{{.ID}}">  
+                    <td class="description">{{ .Description }}</td>  
+                    <td class="rca_number">{{ .RCANumber }}</td>  
+                    <td class="group_name">{{ .GroupName }}</td>  
+                    <td class="details">{{ .Details }}</td>  
+                    <td class="details">{{ .Title }}</td>
+                    <td class="details">{{ .EventDate }}</td>
+                    <td class="details">{{ .StartTime }}</td>
+                    <td class="details">{{ .EndTime }}</td>
+                    <td>  
+                        <button class="btn btn-primary btn-sm edit-btn" data-id="{{.ID}}">ویرایش</button>  
+                        <form method="POST" action="/delete-event/{{ .ID }}" style="display:inline;">  
+                            <button type="submit" class="btn btn-danger btn-sm">حذف</button>  
+                        </form>  
+                    </td>  
+                </tr>  
+                <tr class="edit-form" id="edit-row-{{.ID}}">  
+                    <td colspan="10">  
+                        <form id="edit-form-{{.ID}}">  
+                            <div class="form-group">  
+                                <label for="description">شرح رویداد:</label>  
+                                <textarea class="form-control" name="description">{{.Description}}</textarea>  
+                            </div>  
+                            <div class="form-group">  
+                                <label for="rca_number">شماره RCA:</label>  
+                                <input type="text" class="form-control" name="rca_number" value="{{.RCANumber}}">  
+                            </div>  
+                            <div class="form-group">  
+                                <label for="group_name">گروه:</label>  
+                                <input type="text" class="form-control" name="group_name" value="{{.GroupName}}">  
+                            </div>  
+                            <div class="form-group">  
+                                <label for="details">جزئیات رویداد:</label>  
+                                <textarea class="form-control" name="details">{{.Details}}</textarea>  
+                            </div>
+                            <div class="form-group">  
+                                <label for="details">عنوان رخداد :</label>  
+                                <textarea class="form-control" name="title">{{.Title}}</textarea>  
+                            </div>
+                            <div class="form-group">  
+                                <label for="details">تاریخ ثبت  :</label>  
+                                <textarea class="form-control" name="event_date">{{.EventDate}}</textarea>  
+                            </div>
+                            <div class="form-group">  
+                                <label for="details">ساعت شروع :</label>  
+                                <textarea class="form-control" name="start_time" type="time">{{.StartTime}}</textarea>  
+                            </div>
+                            <div class="form-group">  
+                                <label for="details">ساعت پایان :</label>  
+                                <textarea class="form-control" name="end_time" type="time">{{.EndTime}}</textarea>  
+                            </div>
+                            <button type="button" class="btn btn-success btn-sm save-btn" data-id="{{.ID}}">ذخیره</button>  
+                            <button type="button" class="btn btn-secondary btn-sm cancel-btn" data-id="{{.ID}}">انصراف</button>  
+                        </form>  
+                    </td>  
+                </tr>  
+                {{ end }}  
+            </tbody>  
+        </table>  
+
+        <a href="/dashboard" class="btn btn-secondary">بازگشت</a>  
+    </div>  
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  
+    <script>  
+        $(document).ready(function() {  
+            $('.edit-btn').click(function() {  
+                var id = $(this).data('id');  
+                $('#row-' + id).hide();  
+                $('#edit-row-' + id).show();  
+            });  
+
+            $('.cancel-btn').click(function() {  
+                var id = $(this).data('id');  
+                $('#edit-row-' + id).hide();  
+                $('#row-' + id).show();  
+            });  
+
+            $('.save-btn').click(function() {  
+                var id = $(this).data('id');  
+                var form = $('#edit-form-' + id);  
+                $.ajax({  
+                    url: '/edit-event-ajax/' + id,  
+                    type: 'POST',  
+                    data: form.serialize(),  
+                    success: function(response) {  
+                        // Update the table row with the new data  
+                        $('#row-' + id + ' .description').text(form.find('textarea[name="description"]').val());  
+                        $('#row-' + id + ' .rca_number').text(form.find('input[name="rca_number"]').val());  
+                        $('#row-' + id + ' .group_name').text(form.find('input[name="group_name"]').val());  
+                        $('#row-' + id + ' .details').text(form.find('textarea[name="details"]').val()); 
+                        $('#row-' + id + ' .title').text(form.find('textarea[name="title"]').val());
+                        $('#row-' + id + ' .event_date').text(form.find('textarea[name="event_date"]').val());
+                        $('#row-' + id + ' .start_date').text(form.find('textarea[name="start_date"]').val());
+                        $('#row-' + id + ' .end_date').text(form.find('textarea[name="end_date"]').val());
+
+
+                        
+
+                        // Hide the edit form and show the table row  
+                        $('#edit-row-' + id).hide();  
+                        $('#row-' + id).show();  
+                    },  
+                    error: function(error) {  
+                        alert('Error updating event: ' + error.responseText);  
+                    }  
+                });  
+            });  
+        });  
+    </script>  
+    <script>  
+        function searchEvents() {  
+            var input, filter, table, tr, td, i, j, txtValue;  
+            input = document.getElementById("searchInput");  
+            filter = input.value.toLowerCase();  
+            table = document.getElementById("eventTable");  
+            tr = table.getElementsByTagName("tr");  
+
+            for (i = 0; i < tr.length; i++) {  
+                tr[i].style.display = "none"; // مخفی کردن ردیف ها به طور پیشفرض  
+                for (j = 0; j < tr[i].cells.length; j++) {  
+                    td = tr[i].getElementsByTagName("td")[j];  
+                    if (td) {  
+                        txtValue = td.textContent || td.innerText;  
+                        if (txtValue.toLowerCase().indexOf(filter) > -1) {  
+                            tr[i].style.display = ""; // نمایش ردیف اگر فیلتر مطابقت داشته باشد  
+                            break;  
+                        }  
+                    }         
+                }  
+            }  
+        }  
+    </script>  
+</body>  
+</html>  
