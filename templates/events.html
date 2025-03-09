@@ -31,11 +31,11 @@
                     <th>شرح رویداد</th>  
                     <th>شماره RCA</th>  
                     <th>گروه</th>  
-                    <th>جزئیات رویداد</th>
+                   
                     <th> عنوان رخداد</th>
                     <th>تاریخ ثبت</th>
-                    <th>ساعت شروع</th>
-                    <th>ساعت پایان</th>
+                    <th>کاربر ثبت کننده</th>
+
                     <th>عملیات</th>  
                 </tr>  
             </thead>  
@@ -45,11 +45,11 @@
                     <td class="description">{{ .Description }}</td>  
                     <td class="rca_number">{{ .RCANumber }}</td>  
                     <td class="group_name">{{ .GroupName }}</td>  
-                    <td class="details">{{ .Details }}</td>  
+                   
                     <td class="details">{{ .Title }}</td>
                     <td class="details">{{ .EventDate }}</td>
-                    <td class="details">{{ .StartTime }}</td>
-                    <td class="details">{{ .EndTime }}</td>
+                    <td class="details">{{ .RegisteredUser}}</td>
+
                     <td>  
                         <button class="btn btn-primary btn-sm edit-btn" data-id="{{.ID}}">ویرایش</button>  
                         <form method="POST" action="/delete-event/{{ .ID }}" style="display:inline;">  
@@ -86,11 +86,11 @@
                             </div>
                             <div class="form-group">  
                                 <label for="details">ساعت شروع :</label>  
-                                <textarea class="form-control" name="start_time" type="time">{{.StartTime}}</textarea>  
+                                <textarea type="time" class="form-control" name="start_time">{{.StartTime}}</textarea>  
                             </div>
                             <div class="form-group">  
                                 <label for="details">ساعت پایان :</label>  
-                                <textarea class="form-control" name="end_time" type="time">{{.EndTime}}</textarea>  
+                                <textarea type="time" class="form-control" name="end_time">{{.EndTime}}</textarea>  
                             </div>
                             <button type="button" class="btn btn-success btn-sm save-btn" data-id="{{.ID}}">ذخیره</button>  
                             <button type="button" class="btn btn-secondary btn-sm cancel-btn" data-id="{{.ID}}">انصراف</button>  

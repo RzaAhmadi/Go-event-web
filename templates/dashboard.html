@@ -8,73 +8,106 @@
     <style>  
         body {  
             direction: rtl; /* راست‌چین کردن متن */  
-            background-color: #f8f9fa; /* رنگ پس‌زمینه ملایم */  
+            background-color: rgba(112, 114, 114, 0); /* رنگ پس‌زمینه ملایم */  
         }  
+
         .container {  
-            margin-top: 50px; /* فاصله از بالای صفحه */  
-            background-color: #ffffff; /* رنگ پس‌زمینه فرم */  
-            padding: 30px; /* padding داخلی */  
+            margin-top: 10px; /* فاصله از بالای صفحه */  
+            background-color:hsl(40, 23.10%, 97.50%); /* رنگ پس‌زمینه فرم */  
+            padding: 20px; /* padding داخلی */  
             border-radius: 8px; /* گوشه‌های گرد */  
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* سایه برای عمق بیشتر */  
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* سایه برای عمق بیشتر */  
         }  
+
         h2 {  
-            margin-bottom: 20px; /* فاصله زیر عنوان */  
+            margin-bottom: 90px; /* فاصله زیر عنوان */  
+        }  
+
+        .logo-container {  
+            display: flex; /* برای قرار دادن لوگوها در یک خط */  
+            align-items: center; /* تراز عمودی لوگوها و عنوان */  
+            justify-content: space-between; /* توزیع فضا بین لوگوها و عنوان */  
+            margin-bottom: 20px; /* فاصله از فرم */  
+        }  
+
+        .logo {  
+            width: 100px; /* عرض لوگوها */  
+            height: auto; /* حفظ نسبت تصویر */  
         }  
     </style>  
 </head>  
+
 <body>  
 
+<div class="container" style="text-align: center;">  
+    <div class="logo-container">  
+        <img src="logo.png" class="logo logo-left">  
 
-    <div class="container"  style="text-align: center;">  
         <h2>افزودن رویداد</h2>  
-        <form method="POST" action="/add-event">  
-            <div class="form-group" style="text-align: right;">  
-                <label>شرح رویداد:</label>  
-               <textarea class="form-control" name="description" rows="4" required></textarea>  
-  
-            </div>  
-            <div class="form-group"  style="text-align: right;">  
-                <label>جزئیات رویداد:</label>  
-                  
-                <textarea class="form-control" name="details" rows="4" required></textarea>  
 
-            </div>   
-            <div class="row">  
-                <div class="col-md-6">  
-                    <div class="form-group" style="text-align: right;">  
-                        <label>عنوان رخداد:</label>  
-                        <input type="text" class="form-control text-right" name="title" required>  
-                    </div>  
-                    <div class="form-group" style="text-align: right;">  
-                        <label>شماره RCA:</label>  
-                        <input type="text" class="form-control text-right" name="rca_number" required>  
-                    </div> 
+        <div>  
+            <label name="registered_user"> سلام {{ .username }} !</label>  
+        </div>  
 
-                     <div class="form-group" style="text-align: right;">  
-                        <label>ساعت شروع:</label>  
-                        <input type="time" class="form-control text-right" name="start_time" required>  
-                    </div>   
-                   
-                </div>  
-                <div class="col-md-6">  
-                    <div class="form-group" style="text-align: right;">  
-                        <label>گروه:</label>  
-                        <input type="text" class="form-control text-right" name="group_name" required>  
-                    </div>  
-                    <div class="form-group" style="text-align: right;">  
-                        <label>تاریخ:</label style="text-align: right;">  
-                        <input type="date" class="form-control text-right" name="date" required>  
-                    </div>  
-                    <div class="form-group" style="text-align: right;">  
-                        <label>ساعت پایان:</label>  
-                        <input type="time" class="form-control text-right" name="end_time" required>  
-                    </div>  
-                </div>  
-            </div>  
-            <button type="submit" class="btn btn-primary">ذخیره</button>  
-            <a href="/events" class="btn btn-secondary">نمایش اطلاعات</a>  
-        </form>  
     </div>  
+
+
+    <form method="POST" action="/add-event">  
+        <div class="form-group" style="text-align: right;">  
+            <label>شرح رویداد:</label>  
+            <textarea class="form-control" name="description" rows="4" required></textarea>  
+
+        </div>  
+        <div class="form-group" style="text-align: right;">  
+            <label>جزئیات رویداد:</label>  
+
+            <textarea class="form-control" name="details" rows="4" required></textarea>  
+
+        </div>  
+        <div class="row">  
+            <div class="col-md-6">  
+                <div class="form-group" style="text-align: right;">  
+                    <label>عنوان رخداد:</label>  
+                    <input type="text" class="form-control text-right" name="title" required>  
+                </div>  
+                <div class="form-group" style="text-align: right;">  
+                    <label>شماره RCA:</label>  
+                    <input type="text" class="form-control text-right" name="rca_number" required>  
+                </div>  
+
+                <div class="form-group" style="text-align: right;">  
+                    <label>ساعت شروع:</label>  
+                    <input type="time" class="form-control text-right" name="start_time" required>  
+                </div>  
+
+            </div>  
+            <div class="col-md-6">  
+                <div class="form-group" style="text-align: right;">  
+                    <label>گروه:</label>  
+                    <input type="text" class="form-control text-right" name="group_name" required>  
+                </div>  
+                <div class="form-group" style="text-align: right;">  
+                    <label>تاریخ:</label>  
+                    <input type="date" class="form-control text-right" name="date" required>  
+                </div>  
+                <div class="form-group" style="text-align: right;">  
+                    <label>ساعت پایان:</label>  
+                    <input type="time" class="form-control text-right" name="end_time" required>  
+                </div>  
+
+                <div class="form-group" style="text-align: right;">  
+
+                    <input type="hidden" class="form-control text-right" name="registered_user" value="{{ .username }}">  
+                </div>  
+
+
+            </div>  
+        </div>  
+        <button type="submit" class="btn btn-primary">ذخیره</button>  
+        <a href="/events" class="btn btn-secondary">نمایش اطلاعات</a>  
+    </form>  
+</div>  
+</div>  
 
 </body>  
 </html>  
