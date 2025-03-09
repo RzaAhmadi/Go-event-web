@@ -43,13 +43,13 @@ func main() {
 	}
 	defer db.Close()
 
-	// خودکارسازی جداول
+	// جداول
 	db.AutoMigrate(&User{}, &Event{})
 
 	r := gin.Default()
 
 	// تنظیمات session
-	store, err := postgres.NewStore(db.DB(), []byte("secret")) // ایجاد یک استور جدید
+	store, err := postgres.NewStore(db.DB(), []byte("secret")) //
 	if err != nil {
 		log.Fatal("Failed to create session store: ", err)
 	}
@@ -71,7 +71,7 @@ func main() {
 	r.Run(":8080")
 }
 
-// سایر توابع loginPage، login، dashboardPage، addEvent و غیره...
+//  توابع loginPage، login، dashboardPage، addEvent و غیره...
 
 func loginPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "login.html", nil)
@@ -84,8 +84,8 @@ func login(c *gin.Context) {
 	var user User
 	if err := db.Where("username = ? AND password = ?", username, password).First(&user).Error; err == nil {
 		session := sessions.Default(c)
-		session.Set("user_id", user.ID) // ذخیره شناسه کاربر در جلسه
-		session.Save()                  // ذخیره تغییرات در جلسه
+		session.Set("user_id", user.ID) // ذخیره شناسه کاربر
+		session.Save()                  // ذخیره تغییرات
 		c.Redirect(http.StatusFound, "/dashboard")
 	} else {
 		c.HTML(http.StatusUnauthorized, "login.html", gin.H{"error": "نام کاربری یا رمز عبور نادرست است!"})
@@ -101,13 +101,13 @@ func dashboardPage(c *gin.Context) {
 	// دریافت اطلاعات کاربر از دیتابیس
 	var user User
 	if err := db.First(&user, user).Error; err != nil {
-		// اگر کاربر پیدا نشد، به صفحه لاگین برگردونید یا یک پیام خطا نمایش بدید
+		// اگر کاربر پیدا نشد، به صفحه لاگین برگرد یا یک پیام خطا نمایش دهد
 		c.Redirect(http.StatusFound, "/login")
 		return
 	}
 
 	c.HTML(http.StatusOK, "dashboard.html", gin.H{
-		"username": user.Username, // پاس دادن نام کاربری به قالب
+		"username": user.Username, // ارسال  نام کاربری به قالب
 	})
 }
 
@@ -223,7 +223,7 @@ func editEventAjax(c *gin.Context) {
 		return
 	}
 
-	// Update event fields from form data
+	// بروز رسانی
 	event.Description = c.PostForm("description")
 	event.RCANumber = c.PostForm("rca_number")
 	event.GroupName = c.PostForm("group_name")
@@ -247,7 +247,7 @@ func editEventAjax(c *gin.Context) {
 	}
 	event.EndTime = endTime
 
-	// Save the updated event to the database
+	// ذخیره و بروز رسانی
 	if err := db.Save(&event).Error; err != nil {
 		fmt.Println("Error saving event:", err)
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "خطا در بروز رسانی"})
@@ -276,16 +276,5 @@ func formatTime(timeString string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return t.Format("15:04:05"), nil // Return in "HH:MM:SS" format
-}
-
-// Handler for logout
-func logout(c *gin.Context) {
-	session := sessions.Default(c)
-	session.Options(sessions.Options{MaxAge: -1}) // تنظیم MaxAge به -1 برای حذف session
-	err := session.Save()
-	if err != nil {
-		log.Println("Error saving session after logout:", err) // ثبت خطا
-	}
-	c.Redirect(http.StatusFound, "/login")
+	return t.Format("15:04:05"), nil //
 }
